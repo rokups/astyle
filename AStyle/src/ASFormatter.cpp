@@ -4030,6 +4030,7 @@ void ASFormatter::padOperators(const string* newOperator)
 	                  && !(newOperator == &AS_PLUS && isInExponent())
 	                  && !((newOperator == &AS_PLUS || newOperator == &AS_MINUS)	// check for unary plus or minus
 	                       && (previousNonWSChar == '('
+	                           || previousNonWSChar == ')'		// Eliminate (T)-1 / (T)+1 cast paddings
 	                           || previousNonWSChar == '['
 	                           || previousNonWSChar == '='
 	                           || previousNonWSChar == ','
@@ -4040,6 +4041,7 @@ void ASFormatter::padOperators(const string* newOperator)
 //x                        && isPointerOrReference())
 	                  && !(newOperator == &AS_MULT
 	                       && (previousNonWSChar == '.'
+							   || previousNonWSChar == ')'		// check for dereferenced casts: (T)*p
 	                           || previousNonWSChar == '>'))    // check for ->
 	                  && !(newOperator == &AS_MULT && peekNextChar() == '>')
 	                  && !((isInTemplate || isImmediatelyPostTemplate)

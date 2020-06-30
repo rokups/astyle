@@ -1296,7 +1296,7 @@ void ASBeautifier::registerContinuationIndent(const string& line, int i, int spa
 	if (nextNonWSChar == remainingCharNum || shouldIndentAfterParen)
 	{
 		int previousIndent = spaceIndentCount_;
-		if (!continuationIndentStack->empty())
+		if (!continuationIndentStack->empty() && !isContinuation)
 			previousIndent = continuationIndentStack->back();
 		int currIndent = continuationIndent * indentLength + previousIndent;
 		if (currIndent > maxContinuationIndent && line[i] != '{')
@@ -3130,6 +3130,7 @@ void ASBeautifier::parseCurrentLine(const string& line)
 								lastTempStack->pop_back();
 							}
 
+							// FIXME: `if (*data == v) break; else ++data;` causes line to double-indent. Adding braces fixes it.
 							if (!closingBraceReached)
 								indentCount += restackSize;
 						}
